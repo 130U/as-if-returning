@@ -34,10 +34,11 @@ const copy = {
     date: '2025 年 6 月 8 日',
     play: '播放',
     pause: '暂停',
+    progress: '播放进度',
     scroll: '《洛神赋图》手卷与这一版的声音，可拖动',
     painting: '《洛神赋图》全卷',
     caption:
-      '上：传顾恺之《洛神赋图》，宋摹本，绢本设色，北京故宫博物院藏。画卷从右向左，随音乐展开。下：这一版的声音，由音频计算而成，朱线是引子的旋律出现的地方。',
+      '传顾恺之《洛神赋图》，宋摹本，绢本设色，北京故宫博物院藏。画卷从右向左，随音乐展开。',
     description: '《自由射手幻想曲》新版解析：关于艺术、AI 时代的审美，以及跨越时空的审美。',
     plates: {
       lanting: {
@@ -65,10 +66,11 @@ const copy = {
     date: 'June 8, 2025',
     play: 'Play',
     pause: 'Pause',
+    progress: 'Playback position',
     scroll: 'The Nymph of the Luo River handscroll and the sound of this version, draggable',
     painting: 'The Nymph of the Luo River, the whole scroll',
     caption:
-      'Above: Nymph of the Luo River, attributed to Gu Kaizhi, Song dynasty copy, ink and color on silk, Palace Museum, Beijing. It unrolls from the right with the music. Below: the sound of this version, computed from the audio; the vermilion lines mark where the melody of the introduction appears.',
+      'Nymph of the Luo River, attributed to Gu Kaizhi, Song dynasty copy, ink and color on silk, Palace Museum, Beijing. It unrolls from the right with the music.',
     description: 'On a new version of the Der Freischütz fantasy: art, aesthetics in the age of AI, and beauty across time.',
     plates: {
       lanting: {
@@ -128,7 +130,7 @@ const percent = (v: number) => `${((v / duration) * 100).toFixed(3)}%`;
   </head>
   <body>
     <nav class="top">
-      <a href={copy.otherHref} lang={copy.otherLang} hreflang={copy.otherLang}>{copy.other}</a>
+      <a href={copy.otherHref} lang={copy.otherLang} hreflang={copy.otherLang} data-language>{copy.other}</a>
     </nav>
 
     <header class="masthead">
@@ -137,7 +139,7 @@ const percent = (v: number) => `${((v / duration) * 100).toFixed(3)}%`;
       <p class="date"><time datetime={frontmatter.date}>{copy.date}</time></p>
     </header>
 
-    <section class="scroll" data-scroll data-duration={duration} style="--p: 0">
+    <section class="scroll" data-scroll data-duration={duration}>
       <div class="frame">
         <div
           class="view"
@@ -165,10 +167,14 @@ const percent = (v: number) => `${((v / duration) * 100).toFixed(3)}%`;
 
     <main>
       <div class="transport">
-        <button type="button" class="play" data-play data-play-label={copy.play} data-pause-label={copy.pause} aria-label={copy.play}>
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z" /><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z" /></svg>
-        </button>
-        <span class="clock"><span data-clock>0:00</span> / 3:33</span>
+        <div class="controls">
+          <button type="button" class="play" data-play data-play-label={copy.play} data-pause-label={copy.pause} aria-label={copy.play}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z" /><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z" /></svg>
+          </button>
+          <span class="clock" data-clock>0:00</span>
+          <input class="progress" data-progress type="range" min="0" max={duration} step="0.1" value="0" aria-label={copy.progress} aria-valuetext="0:00" />
+          <span class="clock">3:33</span>
+        </div>
       </div>
       <audio data-audio preload="metadata" src={asset('audio/as-if-returning.mp3')}></audio>
 
@@ -183,10 +189,6 @@ const percent = (v: number) => `${((v / duration) * 100).toFixed(3)}%`;
         <article set:html={body} />
       </div>
     </main>
-
-    <footer class="end">
-      <a href={`${site}/`}>theodoreoy.com</a>
-    </footer>
 
     <script>
       import '../scripts/scroll.ts';
