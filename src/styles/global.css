@@ -24,7 +24,13 @@
   --size-display: clamp(46px, 37px + 2.2vw, 68px);
 
   --band: clamp(190px, 38svh, 380px);
+  --measure: 37em;
+  --p: 0;
   color-scheme: light;
+}
+
+html:lang(en) {
+  --measure: 33em;
 }
 
 * {
@@ -176,12 +182,17 @@ html:lang(zh-Hans) h1 {
   top: 0;
   z-index: 2;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 14px;
   padding: 10px 16px;
   background: var(--paper);
   border-bottom: 1px dashed var(--hair-2);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, calc(var(--measure) - 32px));
 }
 
 .play {
@@ -219,15 +230,56 @@ html:lang(zh-Hans) h1 {
   color: var(--ink-2);
 }
 
-/* Running text. */
-.column {
-  width: min(100%, 37em);
-  margin-inline: auto;
-  padding: 0 16px;
+.progress {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-html:lang(en) .column {
-  width: min(100%, 33em);
+.progress::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, var(--seal) calc(var(--p) * 100%), var(--hair-2) calc(var(--p) * 100%));
+}
+
+.progress::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  background: var(--seal);
+  border: 0;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.progress::-moz-range-track {
+  height: 2px;
+  background: var(--hair-2);
+}
+
+.progress::-moz-range-progress {
+  height: 2px;
+  background: var(--seal);
+}
+
+.progress::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--seal);
+  border: 0;
+  border-radius: 50%;
+}
+
+/* Running text. */
+.column {
+  width: min(100%, var(--measure));
+  margin-inline: auto;
+  padding: 0 16px clamp(56px, 10vh, 96px);
 }
 
 .caption {
@@ -265,6 +317,7 @@ article h2 {
   font-weight: 500;
   line-height: 1.4;
   border-top: 1px dashed var(--hair-2);
+  scroll-margin-top: 72px;
 }
 
 article h2:first-child {
@@ -318,13 +371,6 @@ article h2:last-of-type ~ p {
   font-size: var(--size-small);
   line-height: 1.7;
   color: var(--ink-2);
-}
-
-.end {
-  margin-top: clamp(56px, 10vh, 96px);
-  padding: 24px 16px 40px;
-  text-align: center;
-  font-size: var(--size-small);
 }
 
 @media (prefers-reduced-motion: reduce) {
