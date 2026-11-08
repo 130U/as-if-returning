@@ -1,0 +1,6 @@
+---
+import Page from '../components/Page.astro';
+import * as article from '../content/article.zh.md';
+---
+
+<Page lang="zh" frontmatter={article.frontmatter} html={await article.compiledContent()} />

@@ -1,0 +1,334 @@
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('../assets/fonts/noto-serif-sc.woff2') format('woff2');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #f6f2ea;
+  --ink: #17171c;
+  --ink-2: #4b4b55;
+  --hair: rgba(23, 23, 28, 0.12);
+  --hair-2: rgba(23, 23, 28, 0.26);
+  --seal: #b0382c;
+  --serif-en: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --serif-zh: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+
+  /* Type: one size per role, easing from a phone to a wide desk. */
+  --size-small: clamp(14px, 13.5px + 0.15vw, 15.5px);
+  --size-body: clamp(17px, 16.25px + 0.2vw, 18.5px);
+  --size-quote: clamp(19px, 17.5px + 0.4vw, 22px);
+  --size-heading: clamp(21px, 19.5px + 0.4vw, 24px);
+  --size-display: clamp(46px, 37px + 2.2vw, 68px);
+
+  --band: clamp(190px, 38svh, 380px);
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--serif-en);
+  font-size: var(--size-body);
+  line-height: 1.6;
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html:lang(zh-Hans) body {
+  font-family: var(--serif-zh);
+  line-height: 2;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--hair-2);
+  transition: border-color 160ms ease;
+}
+
+a:hover {
+  border-bottom-color: var(--seal);
+}
+
+:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 3px;
+}
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px clamp(16px, 4vw, 40px) 0;
+  font-size: var(--size-small);
+}
+
+.masthead {
+  padding: clamp(36px, 8vh, 96px) 16px clamp(32px, 6vh, 64px);
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--size-display);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+html:lang(zh-Hans) h1 {
+  padding-left: 0.3em;
+  letter-spacing: 0.3em;
+}
+
+.subtitle {
+  margin-top: 1em;
+}
+
+.date {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+}
+
+/* The handscroll. */
+.frame {
+  position: relative;
+}
+
+.view {
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.view::-webkit-scrollbar {
+  display: none;
+}
+
+.view.is-dragging {
+  cursor: grabbing;
+}
+
+.strip {
+  position: relative;
+  width: calc(var(--band) * 8883 / 380);
+}
+
+.painting {
+  display: block;
+  width: 100%;
+  height: var(--band);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.waterline {
+  position: relative;
+  height: calc(var(--band) * 0.22);
+}
+
+.shadow {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.waterline i {
+  position: absolute;
+  top: 0;
+  height: 2px;
+  background: var(--seal);
+}
+
+.head {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((1 - var(--p)) * (100% - 1px));
+  width: 1px;
+  background: var(--seal);
+  pointer-events: none;
+}
+
+.transport {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: var(--paper);
+  border-bottom: 1px dashed var(--hair-2);
+}
+
+.play {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--paper);
+  background: var(--seal);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.play svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.play .i-pause,
+.play.is-playing .i-play {
+  display: none;
+}
+
+.play.is-playing .i-pause {
+  display: inline;
+}
+
+.clock {
+  font-family: var(--serif-en);
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+/* Running text. */
+.column {
+  width: min(100%, 37em);
+  margin-inline: auto;
+  padding: 0 16px;
+}
+
+html:lang(en) .column {
+  width: min(100%, 33em);
+}
+
+.caption {
+  margin-top: 1.4em;
+  font-size: var(--size-small);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+
+.epigraph {
+  margin: clamp(48px, 9vh, 88px) 0;
+  text-align: center;
+  font-size: var(--size-quote);
+  line-height: 1.8;
+}
+
+.epigraph footer {
+  margin-top: 0.6em;
+  font-size: var(--size-small);
+  color: var(--ink-2);
+}
+
+article p {
+  margin-top: 1.15em;
+}
+
+html:lang(zh-Hans) article p {
+  text-align: justify;
+}
+
+article h2 {
+  margin: 2.8em 0 0;
+  padding-top: 1.2em;
+  font-size: var(--size-heading);
+  font-weight: 500;
+  line-height: 1.4;
+  border-top: 1px dashed var(--hair-2);
+}
+
+article h2:first-child {
+  margin-top: 0;
+}
+
+article h2:last-of-type ~ p {
+  font-size: var(--size-small);
+  line-height: 1.7;
+  color: var(--ink-2);
+  text-align: left;
+}
+
+.t {
+  padding: 0;
+  font: inherit;
+  font-family: var(--serif-en);
+  font-variant-numeric: tabular-nums;
+  color: var(--seal);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+}
+
+.t:hover {
+  border-bottom-color: var(--seal);
+}
+
+.plate {
+  margin: 2.4em 0;
+}
+
+.plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plate--tall img {
+  width: min(300px, 72%);
+  margin-inline: auto;
+}
+
+.plate--tall figcaption {
+  text-align: center;
+}
+
+.plate figcaption {
+  margin-top: 0.9em;
+  font-size: var(--size-small);
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+.end {
+  margin-top: clamp(56px, 10vh, 96px);
+  padding: 24px 16px 40px;
+  text-align: center;
+  font-size: var(--size-small);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

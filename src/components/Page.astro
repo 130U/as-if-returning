@@ -1,0 +1,195 @@
+---
+import '@fontsource/newsreader/400.css';
+import '@fontsource/newsreader/400-italic.css';
+import '@fontsource/newsreader/500.css';
+import '../styles/global.css';
+
+interface Props {
+  lang: 'zh' | 'en';
+  frontmatter: Record<string, string>;
+  html: string;
+}
+
+const { lang, frontmatter, html } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const asset = (path: string) => `${base}${path}`;
+const site = 'https://www.theodoreoy.com';
+
+const duration = 213.24;
+
+// Where the melody of the introduction surfaces, in seconds.
+const marks = [
+  [0, 14],
+  [55, 69],
+  [92, 120],
+  [192, 213.24],
+];
+
+const copy = {
+  zh: {
+    htmlLang: 'zh-Hans',
+    other: 'English',
+    otherLang: 'en',
+    otherHref: asset('en/'),
+    date: '2025 年 6 月 8 日',
+    play: '播放',
+    pause: '暂停',
+    scroll: '《洛神赋图》手卷与这一版的声音，可拖动',
+    painting: '《洛神赋图》全卷',
+    caption:
+      '上：传顾恺之《洛神赋图》，宋摹本，绢本设色，北京故宫博物院藏。画卷从右向左，随音乐展开。下：这一版的声音，由音频计算而成，朱线是引子的旋律出现的地方。',
+    description: '《自由射手幻想曲》新版解析：关于艺术、AI 时代的审美，以及跨越时空的审美。',
+    plates: {
+      lanting: {
+        file: 'plates/lanting-detail.jpg', width: 680, height: 1420, tall: true,
+        alt: '《兰亭序》摹本末尾数行',
+        caption: '冯承素摹王羲之《兰亭序》局部，唐，北京故宫博物院藏。摹本中“犹”写作“由”。',
+      },
+      wolf: {
+        file: 'plates/wolfs-glen.jpg', width: 1400, height: 1237, tall: false,
+        alt: '狼谷舞台设计：幽暗的山谷，骷髅骑手掠过，两名猎人跪在魔圈旁',
+        caption: '《自由射手》第二幕狼谷舞台设计，魏玛，1822 年。Carl Wilhelm Holdermann、Karl Wilhelm Lieber、Carl August Schwerdgeburth 作。',
+      },
+      departure: {
+        file: 'plates/luo-departure.jpg', width: 700, height: 380, tall: false,
+        alt: '《洛神赋图》卷尾：曹植的车驾离开洛水',
+        caption: '《洛神赋图》卷尾局部：曹植的车驾离开洛水。',
+      },
+    },
+  },
+  en: {
+    htmlLang: 'en',
+    other: '中文',
+    otherLang: 'zh-Hans',
+    otherHref: base,
+    date: 'June 8, 2025',
+    play: 'Play',
+    pause: 'Pause',
+    scroll: 'The Nymph of the Luo River handscroll and the sound of this version, draggable',
+    painting: 'The Nymph of the Luo River, the whole scroll',
+    caption:
+      'Above: Nymph of the Luo River, attributed to Gu Kaizhi, Song dynasty copy, ink and color on silk, Palace Museum, Beijing. It unrolls from the right with the music. Below: the sound of this version, computed from the audio; the vermilion lines mark where the melody of the introduction appears.',
+    description: 'On a new version of the Der Freischütz fantasy: art, aesthetics in the age of AI, and beauty across time.',
+    plates: {
+      lanting: {
+        file: 'plates/lanting-detail.jpg', width: 680, height: 1420, tall: true,
+        alt: 'The closing columns of the Orchid Pavilion Preface',
+        caption: "Detail of Feng Chengsu's Tang dynasty copy of Wang Xizhi's Orchid Pavilion Preface, Palace Museum, Beijing.",
+      },
+      wolf: {
+        file: 'plates/wolfs-glen.jpg', width: 1400, height: 1237, tall: false,
+        alt: 'Set design for the Wolf\'s Glen: a dark ravine, a skeleton rider overhead, two huntsmen at the magic circle',
+        caption: "Set design for the Wolf's Glen, Act II of Der Freischütz, Weimar, 1822, by Carl Wilhelm Holdermann, Karl Wilhelm Lieber and Carl August Schwerdgeburth.",
+      },
+      departure: {
+        file: 'plates/luo-departure.jpg', width: 700, height: 380, tall: false,
+        alt: "The end of the scroll: Cao Zhi's carriage leaves the Luo River",
+        caption: "The end of the scroll: Cao Zhi's carriage leaves the Luo River.",
+      },
+    },
+  },
+}[lang];
+
+const plate = (name: keyof typeof copy.plates) => {
+  const p = copy.plates[name];
+  return `<figure class="plate${p.tall ? ' plate--tall' : ''}"><img src="${asset(p.file)}" width="${p.width}" height="${p.height}" alt="${p.alt.replace(/"/g, '&quot;')}" loading="lazy" decoding="async" /><figcaption>${p.caption}</figcaption></figure>`;
+};
+
+const seconds = (stamp: string) => {
+  const [m, s] = stamp.split(':').map(Number);
+  return m * 60 + s;
+};
+
+const body = html
+  .replace(/<p>\[\[plate:(\w+)\]\]<\/p>/g, (_, name) => plate(name))
+  .replace(/(?<![\d:])([0-3]:[0-5]\d)(?![\d:])/g, (_, stamp) => `<button type="button" class="t" data-seek="${seconds(stamp)}">${stamp}</button>`);
+
+const canonical = lang === 'zh' ? `${site}${base}` : `${site}${base}en/`;
+const percent = (v: number) => `${((v / duration) * 100).toFixed(3)}%`;
+---
+
+<!doctype html>
+<html lang={copy.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{frontmatter.title}</title>
+    <meta name="description" content={copy.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-Hans" href={`${site}${base}`} />
+    <link rel="alternate" hreflang="en" href={`${site}${base}en/`} />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={frontmatter.title} />
+    <meta property="og:description" content={copy.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}${base}og.jpg`} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <nav class="top">
+      <a href={copy.otherHref} lang={copy.otherLang} hreflang={copy.otherLang}>{copy.other}</a>
+    </nav>
+
+    <header class="masthead">
+      <h1>{frontmatter.title}</h1>
+      <p class="subtitle">{frontmatter.subtitle}</p>
+      <p class="date"><time datetime={frontmatter.date}>{copy.date}</time></p>
+    </header>
+
+    <section class="scroll" data-scroll data-duration={duration} style="--p: 0">
+      <div class="frame">
+        <div
+          class="view"
+          data-view
+          dir="rtl"
+          tabindex="0"
+          role="slider"
+          aria-label={copy.scroll}
+          aria-valuemin="0"
+          aria-valuemax={Math.round(duration)}
+          aria-valuenow="0"
+          aria-valuetext="0:00"
+        >
+          <div class="strip" data-strip dir="ltr">
+            <img class="painting" src={asset('plates/luo-scroll.jpg')} width="8883" height="380" alt={copy.painting} draggable="false" fetchpriority="high" />
+            <div class="waterline">
+              <img class="shadow" src={asset('shadow.webp')} alt="" draggable="false" />
+              {marks.map(([from, to]) => <i style={`right: ${percent(from)}; width: ${percent(to - from)}`}></i>)}
+            </div>
+          </div>
+        </div>
+        <span class="head" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <main>
+      <div class="transport">
+        <button type="button" class="play" data-play data-play-label={copy.play} data-pause-label={copy.pause} aria-label={copy.play}>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z" /><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z" /></svg>
+        </button>
+        <span class="clock"><span data-clock>0:00</span> / 3:33</span>
+      </div>
+      <audio data-audio preload="metadata" src={asset('audio/as-if-returning.mp3')}></audio>
+
+      <div class="column">
+        <p class="caption">{copy.caption}</p>
+
+        <blockquote class="epigraph">
+          <p>{frontmatter.epigraph}</p>
+          <footer>{frontmatter.epigraph_source}</footer>
+        </blockquote>
+
+        <article set:html={body} />
+      </div>
+    </main>
+
+    <footer class="end">
+      <a href={`${site}/`}>theodoreoy.com</a>
+    </footer>
+
+    <script>
+      import '../scripts/scroll.ts';
+    </script>
+  </body>
+</html>

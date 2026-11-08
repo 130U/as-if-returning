@@ -1,0 +1,25 @@
+{
+  "name": "as-if-returning",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "shadow": "node scripts/shadow.mjs",
+    "font": "node scripts/font.mjs",
+    "plates": "node scripts/plates.mjs"
+  },
+  "dependencies": {
+    "@fontsource/newsreader": "5.3.0",
+    "astro": "7.4.2"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5",
+    "subset-font": "2.4.0"
+  }
+}
