@@ -36,7 +36,7 @@ The essay moves between Cao Zhi and Wang Xizhi, Kant, Gadamer, Benjamin, and Kie
 
 *Der Freischütz* is a parable of this. Of the magic bullets, six obey the marksman and the seventh obeys the devil. When we no longer have to complete every note by hand, what remains ours to decide?
 
-![Set design for the Wolf's Glen: a dark ravine with a skeleton rider overhead and two huntsmen kneeling at a magic circle](.github/readme/wolfs-glen.jpg)
+<p align="center"><img src=".github/readme/wolfs-glen.jpg" width="520" alt="Set design for the Wolf's Glen: a dark ravine with a skeleton rider overhead and two huntsmen kneeling at a magic circle"></p>
 
 ## Credits
 
