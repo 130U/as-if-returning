@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+type: software
+title: "As If Leaving, As If Returning"
+version: "V_202611"
+date-released: 2026-11-19
+abstract: "A new arrangement of the Der Freischütz fantasy, beneath a Song dynasty handscroll that unrolls with the music, with an essay on beauty across time and aesthetics in the age of AI. The site, in Chinese and English."
+authors:
+  - family-names: Ouyang
+    given-names: "Letao (Theodore)"
+repository-code: "https://github.com/130U/BLOG-As-If-Returning"
+url: "https://www.theodoreoy.com/BLOG-As-If-Returning/"
+keywords:
+  - music
+  - Der Freischütz
+  - Chinese painting
+  - handscroll
+  - essay
+  - Web Audio
+preferred-citation:
+  type: website
+  title: "As If Leaving, As If Returning"
+  authors:
+    - family-names: Ouyang
+      given-names: "Letao (Theodore)"
+  year: 2025
+  url: "https://www.theodoreoy.com/BLOG-As-If-Returning/"
